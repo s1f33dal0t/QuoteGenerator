@@ -77,11 +77,11 @@ This repo includes a render.yaml blueprint.
 
 1. Push this folder to GitHub.
 2. In Render, create a new Blueprint and select the repo.
-3. Render reads render.yaml and creates the web service + disk.
+3. Render reads render.yaml and creates the web service.
 4. Set real SMTP and OPENAI_API_KEY values in Render Environment.
 5. Deploy.
 
-The demo stores SQLite data on a Render disk mounted at /var/data.
+The demo uses SQLite in the app folder (`./quote_generator.db`).
 The Render start command runs the legacy status migration automatically before the app boots.
 
 ## Deploy on Render (Production with Postgres)
