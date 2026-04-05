@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% block title %}Quotes - Quote Generator{% endblock %}
+
+{% block content %}
+<div class="py-6">
+  <div class="flex items-center justify-between mb-6">
+    <h1 class="text-2xl font-bold text-slate-800">Quotes</h1>
+    <a href="/quotes/new" class="btn-primary">+ New quote</a>
+  </div>
+
+  <div class="flex gap-2 mb-5 flex-wrap">
+    <a href="/quotes" class="filter-btn {% if not filter_status %}filter-active{% endif %}">All</a>
+    <a href="/quotes?status=draft" class="filter-btn {% if filter_status == 'draft' %}filter-active{% endif %}">Draft</a>
+    <a href="/quotes?status=sent" class="filter-btn {% if filter_status == 'sent' %}filter-active{% endif %}">Sent</a>
+    <a href="/quotes?status=accepted" class="filter-btn {% if filter_status == 'accepted' %}filter-active{% endif %}">Accepted</a>
+    <a href="/quotes?status=rejected" class="filter-btn {% if filter_status == 'rejected' %}filter-active{% endif %}">Rejected</a>
+  </div>
+
+  <div class="bg-white rounded-xl border border-slate-200 shadow-sm">
+    {% if quotes %}
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead class="bg-slate-50 text-slate-500 text-xs uppercase">
+          <tr>
+            <th class="px-6 py-3 text-left">Quote</th>
+            <th class="px-6 py-3 text-left">Customer</th>
+            <th class="px-6 py-3 text-left">Title</th>
+            <th class="px-6 py-3 text-right">Excl. VAT</th>
+            <th class="px-6 py-3 text-right">Incl. VAT</th>
+            <th class="px-6 py-3 text-center">Status</th>
+            <th class="px-6 py-3 text-right">Date</th>
+            <th class="px-6 py-3 text-center">Actions</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-100">
+          {% for q in quotes %}
+          <tr class="hover:bg-slate-50 transition">
+            <td class="px-6 py-3 font-mono text-brand-600">
+              <a href="/quotes/{{ q.id }}" class="hover:underline">{{ q.quote_number }}</a>
+            </td>
+            <td class="px-6 py-3 text-slate-700">{{ q.customer.name }}</td>
+            <td class="px-6 py-3 text-slate-600 max-w-xs truncate">{{ q.title }}</td>
+            <td class="px-6 py-3 text-right text-slate-600">{{ "{:,.0f}".format(q.total_ex_vat).replace(",", " ") }} SEK</td>
+            <td class="px-6 py-3 text-right font-medium">{{ "{:,.0f}".format(q.total_incl_vat).replace(",", " ") }} SEK</td>
+            <td class="px-6 py-3 text-center">
+              <span class="status-badge status-{{ q.status }}">{{ q.status_label }}</span>
+            </td>
+            <td class="px-6 py-3 text-right text-slate-400">{{ q.created_at.strftime('%Y-%m-%d') if q.created_at }}</td>
+            <td class="px-6 py-3">
+              <div class="flex items-center justify-center gap-2">
+                <a href="/quotes/{{ q.id }}" class="btn-ghost text-xs">View</a>
+                <a href="/quotes/{{ q.id }}/pdf" class="btn-ghost text-xs text-brand-600">PDF</a>
+                <form method="post" action="/quotes/{{ q.id }}/delete"
+                      onsubmit="return confirm('Delete quote {{ q.quote_number }}?')">
+                  <button class="btn-ghost text-xs text-red-500">Delete</button>
+                </form>
+              </div>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <div class="px-6 py-12 text-center text-slate-400">
+      <svg class="mx-auto mb-4 w-12 h-12 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+          d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+      </svg>
+      <p class="mb-4">No quotes{% if filter_status %} with status "{{ filter_status }}"{% endif %}.</p>
+      <a href="/quotes/new" class="btn-primary">Create quote</a>
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

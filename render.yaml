@@ -1,0 +1,25 @@
+services:
+  - type: web
+    name: quote-generator-demo
+    env: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: python scripts/migrate_legacy_statuses.py && uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    autoDeploy: true
+    envVars:
+      - key: DATABASE_URL
+        value: sqlite:////var/data/quote_generator.db
+      - key: COMPANY_NAME
+        value: My Company Ltd
+      - key: COMPANY_ADDRESS
+        value: Main Street 1, Stockholm
+      - key: COMPANY_PHONE
+        value: +46 8 123 45 678
+      - key: COMPANY_EMAIL
+        value: hello@mycompany.com
+      - key: FROM_EMAIL
+        value: hello@mycompany.com
+    disks:
+      - name: quote-data
+        mountPath: /var/data
+        sizeGB: 1

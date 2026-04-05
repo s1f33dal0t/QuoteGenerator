@@ -1,0 +1,62 @@
+/* Navigation links */
+.nav-link {
+  @apply px-3 py-1.5 rounded-md text-sm text-slate-200 hover:bg-white/10 transition;
+}
+.nav-active {
+  @apply bg-white/20 font-semibold;
+}
+
+/* Buttons */
+.btn-primary {
+  @apply inline-flex items-center justify-center bg-brand-600 hover:bg-brand-700 text-white
+         text-sm font-medium px-4 py-2 rounded-lg transition shadow-sm;
+}
+.btn-secondary {
+  @apply inline-flex items-center justify-center bg-white hover:bg-slate-50 text-slate-700
+         border border-slate-200 text-sm font-medium px-4 py-2 rounded-lg transition shadow-sm;
+}
+.btn-ghost {
+  @apply inline-flex items-center justify-center text-slate-500 hover:text-slate-800
+         text-sm px-2 py-1 rounded transition;
+}
+
+/* Forms */
+.form-label {
+  @apply block text-sm font-medium text-slate-600 mb-1;
+}
+.form-input {
+  @apply w-full rounded-lg border border-slate-200 bg-white px-3 py-2
+         text-sm text-slate-800 placeholder-slate-300
+         focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent
+         transition;
+}
+textarea.form-input {
+  @apply resize-y;
+}
+select.form-input {
+  @apply cursor-pointer;
+}
+
+/* Status badges */
+.status-badge {
+  @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold;
+}
+.status-draft     { @apply bg-slate-100 text-slate-600; }
+.status-sent      { @apply bg-blue-100 text-blue-700; }
+.status-accepted  { @apply bg-green-100 text-green-700; }
+.status-rejected  { @apply bg-red-100 text-red-600; }
+
+/* Filter buttons */
+.filter-btn {
+  @apply px-3 py-1.5 rounded-lg text-sm border border-slate-200 text-slate-500
+         hover:border-brand-400 hover:text-brand-600 transition bg-white;
+}
+.filter-active {
+  @apply border-brand-500 text-brand-700 bg-brand-50 font-medium;
+}
+
+/* Print mode */
+@media print {
+  nav, footer, .btn-primary, .btn-secondary, .btn-ghost, form[method="post"] { display: none !important; }
+  body { background: white; }
+}

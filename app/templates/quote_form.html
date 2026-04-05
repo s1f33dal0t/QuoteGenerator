@@ -1,0 +1,323 @@
+{% extends "base.html" %}
+{% block title %}{% if quote %}Edit quote{% else %}New quote{% endif %} - Quote Generator{% endblock %}
+
+{% block content %}
+<div class="py-6">
+  <div class="flex items-center gap-3 mb-6">
+    <a href="/quotes" class="text-slate-400 hover:text-slate-600"><- Quotes</a>
+    <span class="text-slate-300">/</span>
+    <h1 class="text-2xl font-bold text-slate-800">
+      {% if quote %}Edit {{ quote.quote_number }}{% else %}New quote{% endif %}
+    </h1>
+  </div>
+
+  <form method="post" action="{{ action }}" id="quoteForm">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div class="lg:col-span-1 flex flex-col gap-5">
+
+        <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-5">
+          <h2 class="font-semibold text-slate-700 mb-4">Customer information</h2>
+
+          <div class="mb-4">
+            <label class="form-label">Customer <span class="text-red-500">*</span></label>
+            <select name="customer_id" required class="form-input">
+              <option value="">Select customer...</option>
+              {% for c in customers %}
+              <option value="{{ c.id }}"
+                {% if (quote and quote.customer_id == c.id) or (not quote and selected_customer_id == c.id) %}selected{% endif %}>
+                {{ c.name }}{% if c.company %} ({{ c.company }}){% endif %}
+              </option>
+              {% endfor %}
+            </select>
+            <a href="/customers/new" target="_blank" class="text-xs text-brand-600 mt-1 inline-block hover:underline">
+              + Create new customer
+            </a>
+          </div>
+
+          <div class="mb-4">
+            <label class="form-label">Valid for (days)</label>
+            <input type="number" name="valid_days" class="form-input" min="1" max="365"
+              value="{{ quote.valid_days if quote else 30 }}" />
+          </div>
+        </div>
+
+        <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-5">
+          <h2 class="font-semibold text-slate-700 mb-4">Quote details</h2>
+
+          <div class="mb-4">
+            <label class="form-label">Title <span class="text-red-500">*</span></label>
+            <input type="text" name="title" required class="form-input"
+              value="{{ quote.title if quote else '' }}" placeholder="e.g. Web development - Phase 1" />
+          </div>
+
+          <div class="mb-4">
+            <label class="form-label">Description</label>
+            <textarea name="description" rows="3" class="form-input"
+              placeholder="Short description of the scope...">{{ quote.description if quote and quote.description else '' }}</textarea>
+          </div>
+
+          <div>
+            <label class="form-label">Internal notes / Terms</label>
+            <textarea name="notes" rows="3" class="form-input"
+              placeholder="Payment terms, timeline, extra details...">{{ quote.notes if quote and quote.notes else '' }}</textarea>
+          </div>
+        </div>
+      </div>
+
+      <div class="lg:col-span-2">
+        <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-5">
+          <div class="flex items-center justify-between mb-4">
+            <h2 class="font-semibold text-slate-700">Services / Products</h2>
+            <div class="flex gap-2">
+              <div id="aiPanel" class="hidden flex items-center gap-2">
+                <input type="text" id="aiService" class="form-input py-1.5 text-sm w-44" placeholder="Service name..." />
+                <input type="text" id="aiKeywords" class="form-input py-1.5 text-sm w-44" placeholder="Keywords (optional)" />
+                <button type="button" id="aiGenerateBtn"
+                  class="bg-purple-600 hover:bg-purple-500 text-white text-xs px-3 py-1.5 rounded-lg font-medium transition">
+                  Generate text
+                </button>
+              </div>
+              <button type="button" id="toggleAI"
+                class="btn-ghost text-xs text-purple-600">AI text</button>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-12 gap-2 text-xs font-semibold text-slate-400 uppercase px-1 mb-2">
+            <div class="col-span-5">Description</div>
+            <div class="col-span-2 text-center">Qty</div>
+            <div class="col-span-1 text-center">Unit</div>
+            <div class="col-span-2 text-right">Unit price (SEK)</div>
+            <div class="col-span-1 text-right">Amount</div>
+            <div class="col-span-1"></div>
+          </div>
+
+          <div id="itemsContainer">
+            {% if quote and quote.items %}
+              {% for item in quote.items %}
+              <div class="item-row grid grid-cols-12 gap-2 mb-2 items-start">
+                <div class="col-span-5">
+                  <input type="text" name="item_description[{{ loop.index0 }}]"
+                    class="form-input py-1.5 text-sm item-desc" required
+                    value="{{ item.description }}" placeholder="Description..." />
+                </div>
+                <div class="col-span-2">
+                  <input type="number" name="item_quantity[{{ loop.index0 }}]"
+                    class="form-input py-1.5 text-sm text-center item-qty"
+                    value="{{ item.quantity | int if item.quantity == item.quantity | int else item.quantity }}"
+                    min="0.01" step="0.01" />
+                </div>
+                <div class="col-span-1">
+                  <input type="text" name="item_unit[{{ loop.index0 }}]"
+                    class="form-input py-1.5 text-sm text-center item-unit"
+                    value="{{ item.unit }}" placeholder="pcs" />
+                </div>
+                <div class="col-span-2">
+                  <input type="number" name="item_unit_price[{{ loop.index0 }}]"
+                    class="form-input py-1.5 text-sm text-right item-price"
+                    value="{{ item.unit_price }}" min="0" step="0.01" />
+                </div>
+                <div class="col-span-1 flex items-center justify-end">
+                  <span class="item-total text-sm font-medium text-slate-700 whitespace-nowrap">
+                    {{ "{:,.0f}".format(item.total).replace(",", " ") }}
+                  </span>
+                </div>
+                <div class="col-span-1 flex items-center justify-center">
+                  <button type="button" class="remove-row text-slate-300 hover:text-red-500 transition text-lg leading-none">x</button>
+                </div>
+              </div>
+              {% endfor %}
+            {% else %}
+              <div class="item-row grid grid-cols-12 gap-2 mb-2 items-start">
+                <div class="col-span-5">
+                  <input type="text" name="item_description[0]" class="form-input py-1.5 text-sm item-desc"
+                    placeholder="Description..." />
+                </div>
+                <div class="col-span-2">
+                  <input type="number" name="item_quantity[0]" class="form-input py-1.5 text-sm text-center item-qty"
+                    value="1" min="0.01" step="0.01" />
+                </div>
+                <div class="col-span-1">
+                  <input type="text" name="item_unit[0]" class="form-input py-1.5 text-sm text-center item-unit"
+                    value="pcs" placeholder="pcs" />
+                </div>
+                <div class="col-span-2">
+                  <input type="number" name="item_unit_price[0]" class="form-input py-1.5 text-sm text-right item-price"
+                    value="" min="0" step="0.01" placeholder="0" />
+                </div>
+                <div class="col-span-1 flex items-center justify-end">
+                  <span class="item-total text-sm font-medium text-slate-700">0</span>
+                </div>
+                <div class="col-span-1 flex items-center justify-center">
+                  <button type="button" class="remove-row text-slate-300 hover:text-red-500 transition text-lg leading-none">x</button>
+                </div>
+              </div>
+            {% endif %}
+          </div>
+
+          <button type="button" id="addRow"
+            class="mt-2 w-full border-2 border-dashed border-slate-200 hover:border-brand-400 text-slate-400 hover:text-brand-600 rounded-lg py-2 text-sm transition">
+            + Add line
+          </button>
+
+          <div class="mt-5 pt-4 border-t border-slate-100 flex flex-col items-end gap-1 text-sm">
+            <div class="flex gap-8">
+              <span class="text-slate-500">Subtotal (excl. VAT)</span>
+              <span id="subtotal" class="font-medium w-32 text-right">0 SEK</span>
+            </div>
+            <div class="flex gap-8">
+              <span class="text-slate-500">VAT 25%</span>
+              <span id="vat" class="text-slate-500 w-32 text-right">0 SEK</span>
+            </div>
+            <div class="flex gap-8 text-base font-bold text-slate-800">
+              <span>Total (incl. VAT)</span>
+              <span id="grandtotal" class="w-32 text-right text-brand-700">0 SEK</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex gap-3 mt-4">
+          <button type="submit" class="btn-primary">
+            {% if quote %}Save changes{% else %}Create quote{% endif %}
+          </button>
+          <a href="/quotes{% if quote %}/{{ quote.id }}{% endif %}" class="btn-secondary">Cancel</a>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  let rowIndex = {{ (quote.items | length) if quote and quote.items else 1 }};
+
+  function formatSEK(n) {
+    return new Intl.NumberFormat('en-US', { maximumFractionDigits: 0 }).format(n) + ' SEK';
+  }
+
+  function recalcRow(row) {
+    const qty = parseFloat(row.querySelector('.item-qty').value) || 0;
+    const price = parseFloat(row.querySelector('.item-price').value) || 0;
+    const total = qty * price;
+    row.querySelector('.item-total').textContent = formatSEK(total);
+    return total;
+  }
+
+  function recalcAll() {
+    let subtotal = 0;
+    document.querySelectorAll('.item-row').forEach(row => {
+      subtotal += recalcRow(row);
+    });
+    const vat = subtotal * 0.25;
+    document.getElementById('subtotal').textContent = formatSEK(subtotal);
+    document.getElementById('vat').textContent = formatSEK(vat);
+    document.getElementById('grandtotal').textContent = formatSEK(subtotal + vat);
+  }
+
+  function rebuildIndices() {
+    document.querySelectorAll('.item-row').forEach((row, idx) => {
+      row.querySelector('.item-desc').name = `item_description[${idx}]`;
+      row.querySelector('.item-qty').name = `item_quantity[${idx}]`;
+      row.querySelector('.item-unit').name = `item_unit[${idx}]`;
+      row.querySelector('.item-price').name = `item_unit_price[${idx}]`;
+    });
+    rowIndex = document.querySelectorAll('.item-row').length;
+  }
+
+  function createRow() {
+    const row = document.createElement('div');
+    row.className = 'item-row grid grid-cols-12 gap-2 mb-2 items-start';
+    row.innerHTML = `
+      <div class="col-span-5">
+        <input type="text" name="item_description[${rowIndex}]"
+          class="form-input py-1.5 text-sm item-desc" placeholder="Description..." />
+      </div>
+      <div class="col-span-2">
+        <input type="number" name="item_quantity[${rowIndex}]"
+          class="form-input py-1.5 text-sm text-center item-qty" value="1" min="0.01" step="0.01" />
+      </div>
+      <div class="col-span-1">
+        <input type="text" name="item_unit[${rowIndex}]"
+          class="form-input py-1.5 text-sm text-center item-unit" value="pcs" placeholder="pcs" />
+      </div>
+      <div class="col-span-2">
+        <input type="number" name="item_unit_price[${rowIndex}]"
+          class="form-input py-1.5 text-sm text-right item-price" value="" min="0" step="0.01" placeholder="0" />
+      </div>
+      <div class="col-span-1 flex items-center justify-end">
+        <span class="item-total text-sm font-medium text-slate-700">0</span>
+      </div>
+      <div class="col-span-1 flex items-center justify-center">
+        <button type="button" class="remove-row text-slate-300 hover:text-red-500 transition text-lg leading-none">x</button>
+      </div>`;
+    rowIndex++;
+    return row;
+  }
+
+  document.getElementById('addRow').addEventListener('click', () => {
+    const row = createRow();
+    document.getElementById('itemsContainer').appendChild(row);
+    bindRow(row);
+    row.querySelector('.item-desc').focus();
+  });
+
+  function bindRow(row) {
+    row.querySelectorAll('.item-qty, .item-price').forEach(input => {
+      input.addEventListener('input', recalcAll);
+    });
+    row.querySelector('.remove-row').addEventListener('click', () => {
+      row.remove();
+      rebuildIndices();
+      recalcAll();
+    });
+  }
+
+  document.querySelectorAll('.item-row').forEach(bindRow);
+  recalcAll();
+
+  document.getElementById('toggleAI').addEventListener('click', () => {
+    document.getElementById('aiPanel').classList.toggle('hidden');
+  });
+
+  document.getElementById('aiGenerateBtn').addEventListener('click', async () => {
+    const service = document.getElementById('aiService').value.trim();
+    const keywords = document.getElementById('aiKeywords').value.trim();
+    if (!service) { alert('Please enter a service name'); return; }
+
+    const btn = document.getElementById('aiGenerateBtn');
+    btn.textContent = 'Generating...';
+    btn.disabled = true;
+
+    try {
+      const res = await fetch('/api/generate-text', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ service_name: service, keywords })
+      });
+      const data = await res.json();
+      if (data.text) {
+        const rows = document.querySelectorAll('.item-row');
+        let target = null;
+        rows.forEach(r => {
+          if (!r.querySelector('.item-desc').value) target = r;
+        });
+        if (!target) {
+          target = createRow();
+          document.getElementById('itemsContainer').appendChild(target);
+          bindRow(target);
+        }
+        target.querySelector('.item-desc').value = data.text;
+        document.getElementById('aiService').value = '';
+        document.getElementById('aiKeywords').value = '';
+      } else if (data.error) {
+        alert('AI error: ' + data.error);
+      }
+    } catch (e) {
+      alert('Error calling the AI service.');
+    } finally {
+      btn.textContent = 'Generate text';
+      btn.disabled = false;
+    }
+  });
+</script>
+{% endblock %}

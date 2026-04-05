@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block title %}Customers - Quote Generator{% endblock %}
+
+{% block content %}
+<div class="py-6">
+  <div class="flex items-center justify-between mb-6">
+    <h1 class="text-2xl font-bold text-slate-800">Customers</h1>
+    <a href="/customers/new" class="btn-primary">+ New customer</a>
+  </div>
+
+  <div class="bg-white rounded-xl border border-slate-200 shadow-sm">
+    {% if customers %}
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead class="bg-slate-50 text-slate-500 text-xs uppercase">
+          <tr>
+            <th class="px-6 py-3 text-left">Name</th>
+            <th class="px-6 py-3 text-left">Company</th>
+            <th class="px-6 py-3 text-left">Email</th>
+            <th class="px-6 py-3 text-left">Phone</th>
+            <th class="px-6 py-3 text-right">Quotes</th>
+            <th class="px-6 py-3 text-center">Actions</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-100">
+          {% for c in customers %}
+          <tr class="hover:bg-slate-50 transition">
+            <td class="px-6 py-3 font-medium text-slate-800">{{ c.name }}</td>
+            <td class="px-6 py-3 text-slate-600">{{ c.company or "-" }}</td>
+            <td class="px-6 py-3 text-slate-600">
+              {% if c.email %}<a href="mailto:{{ c.email }}" class="text-brand-600 hover:underline">{{ c.email }}</a>
+              {% else %}-{% endif %}
+            </td>
+            <td class="px-6 py-3 text-slate-600">{{ c.phone or "-" }}</td>
+            <td class="px-6 py-3 text-right text-slate-500">{{ c.quotes | length }}</td>
+            <td class="px-6 py-3">
+              <div class="flex items-center justify-center gap-2">
+                <a href="/customers/{{ c.id }}/edit" class="btn-ghost text-xs">Edit</a>
+                <a href="/quotes/new?customer={{ c.id }}" class="btn-ghost text-xs text-brand-600">+ Quote</a>
+                <form method="post" action="/customers/{{ c.id }}/delete"
+                      onsubmit="return confirm('Delete {{ c.name }}?')">
+                  <button class="btn-ghost text-xs text-red-500">Delete</button>
+                </form>
+              </div>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <div class="px-6 py-12 text-center text-slate-400">
+      <svg class="mx-auto mb-4 w-12 h-12 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+          d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/>
+      </svg>
+      <p class="mb-4">No customers yet.</p>
+      <a href="/customers/new" class="btn-primary">Add your first customer</a>
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

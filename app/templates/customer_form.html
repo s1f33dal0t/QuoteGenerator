@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block title %}{% if customer %}Edit customer{% else %}New customer{% endif %} - Quote Generator{% endblock %}
+
+{% block content %}
+<div class="py-6 max-w-2xl">
+  <div class="flex items-center gap-3 mb-6">
+    <a href="/customers" class="text-slate-400 hover:text-slate-600"><- Customers</a>
+    <span class="text-slate-300">/</span>
+    <h1 class="text-2xl font-bold text-slate-800">
+      {% if customer %}Edit customer{% else %}New customer{% endif %}
+    </h1>
+  </div>
+
+  <div class="bg-white rounded-xl border border-slate-200 shadow-sm p-6">
+    <form method="post" action="{{ action }}">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+
+        <div class="sm:col-span-2">
+          <label class="form-label">Name <span class="text-red-500">*</span></label>
+          <input type="text" name="name" required class="form-input"
+            value="{{ customer.name if customer else '' }}" placeholder="First Last" />
+        </div>
+
+        <div>
+          <label class="form-label">Company</label>
+          <input type="text" name="company" class="form-input"
+            value="{{ customer.company if customer and customer.company else '' }}" placeholder="Company Ltd" />
+        </div>
+
+        <div>
+          <label class="form-label">Org. number</label>
+          <input type="text" name="org_number" class="form-input"
+            value="{{ customer.org_number if customer and customer.org_number else '' }}" placeholder="556123-4567" />
+        </div>
+
+        <div>
+          <label class="form-label">Email</label>
+          <input type="email" name="email" class="form-input"
+            value="{{ customer.email if customer and customer.email else '' }}" placeholder="email@example.com" />
+        </div>
+
+        <div>
+          <label class="form-label">Phone</label>
+          <input type="text" name="phone" class="form-input"
+            value="{{ customer.phone if customer and customer.phone else '' }}" placeholder="+46 70 123 45 67" />
+        </div>
+
+        <div class="sm:col-span-2">
+          <label class="form-label">Address</label>
+          <textarea name="address" rows="3" class="form-input"
+            placeholder="Street address&#10;Postal code City">{{ customer.address if customer and customer.address else '' }}</textarea>
+        </div>
+
+      </div>
+
+      <div class="flex gap-3 mt-6 pt-4 border-t border-slate-100">
+        <button type="submit" class="btn-primary">
+          {% if customer %}Save changes{% else %}Create customer{% endif %}
+        </button>
+        <a href="/customers" class="btn-secondary">Cancel</a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
