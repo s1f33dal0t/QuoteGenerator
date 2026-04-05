@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-label="Dashboard screenshot placeholder">
+  <rect width="1600" height="900" fill="#0b1220" />
+  <rect x="40" y="40" width="1520" height="820" rx="16" fill="#111827" stroke="#334155" />
+  <rect x="70" y="80" width="1460" height="70" rx="10" fill="#1e293b" />
+  <rect x="70" y="180" width="350" height="170" rx="12" fill="#1f2937" />
+  <rect x="445" y="180" width="350" height="170" rx="12" fill="#1f2937" />
+  <rect x="820" y="180" width="350" height="170" rx="12" fill="#1f2937" />
+  <rect x="1195" y="180" width="335" height="170" rx="12" fill="#1f2937" />
+  <rect x="70" y="380" width="1460" height="450" rx="12" fill="#111827" stroke="#334155" />
+  <text x="100" y="130" fill="#e2e8f0" font-family="Arial, sans-serif" font-size="28" font-weight="700">Dashboard Placeholder</text>
+  <text x="100" y="420" fill="#93c5fd" font-family="Arial, sans-serif" font-size="22">Replace with your real dashboard screenshot</text>
+</svg>

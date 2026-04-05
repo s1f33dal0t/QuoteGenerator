@@ -18,7 +18,14 @@ def resolve_sqlite_path(database_url: str) -> Optional[Path]:
 
     raw_path = database_url[len(prefix):]
     if raw_path.startswith("/"):
-        return Path(raw_path)
+        db_path = Path(raw_path)
+        try:
+            db_path.parent.mkdir(parents=True, exist_ok=True)
+        except OSError:
+            # Can't create the directory (e.g. no disk on Render free plan);
+            # fall back to a local relative path so the app can still start.
+            return Path.cwd() / "quote_generator.db"
+        return db_path
     return Path.cwd() / raw_path
 
 

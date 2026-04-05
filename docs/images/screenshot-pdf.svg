@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="900" viewBox="0 0 1400 900" role="img" aria-label="PDF preview placeholder">
+  <rect width="1400" height="900" fill="#0f172a" />
+  <rect x="150" y="60" width="1100" height="780" rx="12" fill="#e2e8f0" />
+  <rect x="210" y="120" width="980" height="60" rx="8" fill="#cbd5e1" />
+  <rect x="210" y="210" width="980" height="20" rx="4" fill="#94a3b8" />
+  <rect x="210" y="250" width="980" height="20" rx="4" fill="#94a3b8" />
+  <rect x="210" y="290" width="980" height="20" rx="4" fill="#94a3b8" />
+  <rect x="210" y="360" width="980" height="300" rx="8" fill="#cbd5e1" />
+  <text x="220" y="160" fill="#334155" font-family="Arial, sans-serif" font-size="32" font-weight="700">PDF Preview Placeholder</text>
+  <text x="220" y="710" fill="#475569" font-family="Arial, sans-serif" font-size="22">Replace this file with a real exported quote PDF preview</text>
+</svg>

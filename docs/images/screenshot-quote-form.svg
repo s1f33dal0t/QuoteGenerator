@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-label="Quote form screenshot placeholder">
+  <rect width="1600" height="900" fill="#0f172a" />
+  <rect x="40" y="40" width="1520" height="820" rx="16" fill="#111827" stroke="#334155" />
+  <rect x="70" y="80" width="480" height="740" rx="12" fill="#1f2937" />
+  <rect x="580" y="80" width="950" height="740" rx="12" fill="#111827" stroke="#334155" />
+  <rect x="610" y="130" width="890" height="80" rx="8" fill="#1e293b" />
+  <rect x="610" y="235" width="890" height="80" rx="8" fill="#1e293b" />
+  <rect x="610" y="340" width="890" height="80" rx="8" fill="#1e293b" />
+  <rect x="610" y="445" width="890" height="80" rx="8" fill="#1e293b" />
+  <text x="100" y="130" fill="#e2e8f0" font-family="Arial, sans-serif" font-size="28" font-weight="700">Quote Form Placeholder</text>
+  <text x="100" y="170" fill="#93c5fd" font-family="Arial, sans-serif" font-size="20">Swap this with your real create quote screen</text>
+</svg>

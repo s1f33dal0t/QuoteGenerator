@@ -1,4 +1,5 @@
 import os
+from pathlib import Path
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, DeclarativeBase
 from dotenv import load_dotenv
@@ -13,8 +14,34 @@ def normalize_database_url(url: str) -> str:
     return url
 
 
-DATABASE_URL = normalize_database_url(
-    os.getenv("DATABASE_URL", "sqlite:///./quote_generator.db")
+def _resolve_sqlite_url(url: str) -> str:
+    """For SQLite absolute paths, ensure the parent dir exists.
+    Falls back to a local relative path if the directory cannot be created
+    (e.g. Render free plan without a persistent disk attached)."""
+    prefix = "sqlite:///"
+    if not url.startswith(prefix):
+        return url
+    raw = url[len(prefix):]
+    if not raw.startswith("/"):
+        return url  # relative path — SQLite creates the file automatically
+    db_path = Path(raw)
+    try:
+        db_path.parent.mkdir(parents=True, exist_ok=True)
+    except OSError:
+        fallback = "sqlite:///./quote_generator.db"
+        print(
+            f"WARNING: Cannot create SQLite dir {db_path.parent}, "
+            f"falling back to {fallback}",
+            flush=True,
+        )
+        return fallback
+    return url
+
+
+DATABASE_URL = _resolve_sqlite_url(
+    normalize_database_url(
+        os.getenv("DATABASE_URL", "sqlite:///./quote_generator.db")
+    )
 )
 
 engine = create_engine(

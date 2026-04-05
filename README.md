@@ -1,102 +1,201 @@
-# Quote Generator (Demo)
+# Quote Generator
 
-A small FastAPI app for creating and sending professional quotes.
+Create professional quotes in minutes, not hours.
 
-## Features
+![Quote Generator Hero](docs/images/hero-overview.svg)
 
-- Customer list and customer management
-- Quote creation form with line items
-- Automatic PDF generation
-- Quote history and status updates
-- Email action: send quote to customer
-- Optional AI helper for generating line-item description text
+Quote Generator is a clean web app for small businesses that need to create quotes fast, export polished PDFs, and keep everything in one place.
+
+## Why This Exists
+
+Manual quotes in Word or spreadsheets are slow, error-prone, and hard to scale.
+
+This project gives you a focused workflow:
+
+- Add customer details
+- Build quote line items
+- Calculate totals and VAT automatically
+- Export a professional PDF
+- Track quote status over time
+- Optionally generate line descriptions with AI
+
+## Product Preview
+
+### Dashboard
+
+![Dashboard Placeholder](docs/images/screenshot-dashboard.svg)
+
+### Create Quote Form
+
+![Quote Form Placeholder](docs/images/screenshot-quote-form.svg)
+
+### PDF Output
+
+![PDF Placeholder](docs/images/screenshot-pdf.svg)
+
+Note:
+Replace these placeholder images with your real screenshots whenever you want. Keep the same filenames for zero README changes.
+
+## Core Features
+
+- Customer management (create, edit, delete)
+- Quote builder with dynamic line items
+- Automatic VAT and total calculations
+- Quote status flow: draft, sent, accepted, rejected
+- One-click PDF export
+- Email send action from quote view
+- Optional AI helper for service description text
+- Health endpoint for quick runtime checks
 
 ## Tech Stack
 
 - Backend: FastAPI
-- Templates: Jinja2 (server-rendered)
-- Database: SQLite (SQLAlchemy)
-- PDF: reportlab
+- Rendering: Jinja2 templates (server-rendered)
+- ORM: SQLAlchemy
+- Database: SQLite (demo) and PostgreSQL (supported)
+- PDF engine: reportlab
 - Optional AI: OpenAI API
+- Deploy target: Render
+
+## Quick Start (Local)
+
+1. Create and activate virtual environment.
+2. Install dependencies.
+3. Copy env file.
+4. Run app.
+
+```bash
+python -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+cp .env.example .env
+python run.py
+```
+
+Open:
+
+- App: http://127.0.0.1:8000
+- Health: http://127.0.0.1:8000/health
+
+## Environment Variables
+
+Required for basic demo:
+
+- `DATABASE_URL` (default: `sqlite:///./quote_generator.db`)
+- `COMPANY_NAME`
+- `COMPANY_EMAIL`
+
+Optional:
+
+- SMTP settings for email send
+  - `SMTP_HOST`
+  - `SMTP_PORT`
+  - `SMTP_USER`
+  - `SMTP_PASSWORD`
+  - `FROM_EMAIL`
+- AI integration
+  - `OPENAI_API_KEY`
 
 ## Database Modes
 
-- Local/demo: SQLite with `quote_generator.db`
-- Public production: PostgreSQL (recommended)
+Demo mode:
 
-The app supports both with `DATABASE_URL`.
+- SQLite
+- Example: `sqlite:///./quote_generator.db`
 
-Examples:
+Production mode:
 
-- SQLite: `sqlite:///./quote_generator.db`
-- PostgreSQL: `postgresql+psycopg://USER:PASSWORD@HOST:PORT/DBNAME`
+- PostgreSQL
+- Example: `postgresql+psycopg://USER:PASSWORD@HOST:PORT/DBNAME`
 
-## Local Run
+The app normalizes common Postgres URL formats automatically.
 
-1. Create and activate a virtual environment.
-2. Install dependencies:
+## Legacy Status Migration
 
-   pip install -r requirements.txt
+If you have older Swedish status values in an existing SQLite database, run:
 
-3. Copy environment file and update values:
+```bash
+python scripts/migrate_legacy_statuses.py
+```
 
-   cp .env.example .env
+Conversions:
 
-4. Start the app:
+- `utkast` -> `draft`
+- `skickad` -> `sent`
+- `accepterad` -> `accepted`
+- `avvisad` -> `rejected`
 
-   python run.py
-
-5. Open:
-
-   http://127.0.0.1:8000
-
-6. Optional health check:
-
-   http://127.0.0.1:8000/health
-
-The default local SQLite file is:
-
-   quote_generator.db
-
-## Legacy Data Migration
-
-If you have an older database with Swedish quote statuses, run:
-
-   python scripts/migrate_legacy_statuses.py
-
-This converts old values to the current English statuses:
-
-- utkast -> draft
-- skickad -> sent
-- accepterad -> accepted
-- avvisad -> rejected
+When `DATABASE_URL` points to PostgreSQL, the migration script skips automatically.
 
 ## Deploy on Render (Demo)
 
-This repo includes a render.yaml blueprint.
+This repository already includes a ready-to-use [render.yaml](render.yaml).
 
-1. Push this folder to GitHub.
-2. In Render, create a new Blueprint and select the repo.
-3. Render reads render.yaml and creates the web service.
-4. Set real SMTP and OPENAI_API_KEY values in Render Environment.
-5. Deploy.
+1. Push code to GitHub.
+2. In Render, choose New + Blueprint.
+3. Select this repository.
+4. Render creates the web service from `render.yaml`.
+5. Click deploy.
 
-The demo uses SQLite in the app folder (`./quote_generator.db`).
-The Render start command runs the legacy status migration automatically before the app boots.
+Start command used by Render:
 
-## Deploy on Render (Production with Postgres)
+```bash
+python scripts/migrate_legacy_statuses.py && uvicorn app.main:app --host 0.0.0.0 --port $PORT
+```
 
-1. Create a PostgreSQL database in Render.
-2. Set `DATABASE_URL` in the web service environment to the internal DB URL from Render.
-3. Remove the disk block if you do not need SQLite persistence.
-4. Keep the same start command.
+For a pure demo, you can leave SMTP and OpenAI unset.
 
-The migration script auto-skips when `DATABASE_URL` is not SQLite.
+## API and Health
 
-## Health Check
+Health endpoint:
 
-The app exposes a small health endpoint:
+- `GET /health`
 
-   /health
+Example response:
 
-It returns app status, database connectivity, and simple row counts.
+```json
+{
+  "status": "ok",
+  "database": "connected",
+  "customers": 2,
+  "quotes": 2
+}
+```
+
+## Project Structure
+
+```text
+app/
+  main.py
+  config.py
+  database.py
+  models.py
+  routes/
+  templates/
+  utils/
+scripts/
+  migrate_legacy_statuses.py
+static/
+  css/
+render.yaml
+run.py
+```
+
+## What To Replace Before Public Demo
+
+- Company identity values in Render env vars
+- Placeholder images in `docs/images/`
+- SMTP credentials (if email sending should be active)
+- OpenAI key (if AI text generation should be active)
+
+## Roadmap Ideas
+
+- Multi-user authentication
+- Tax rate configuration per market
+- Line-item templates
+- Branded themes per customer segment
+- Quote analytics and conversion metrics
+
+## License
+
+Use this project as a base for your own business workflow and customize freely.
