@@ -4,7 +4,7 @@ Create professional quotes in minutes, not hours.
 
 ![Quote Generator Hero](docs/images/hero-overview.svg)
 
-Quote Generator is a clean web app for small businesses that need to create quotes fast, export polished PDFs, and keep everything in one place.
+Quote Generator is a focused FastAPI web app for freelancers and small teams. It helps you move from customer details to a finished quote PDF with less admin work, fewer mistakes, and a cleaner process.
 
 ## Why This Exists
 
@@ -18,6 +18,31 @@ This project gives you a focused workflow:
 - Export a professional PDF
 - Track quote status over time
 - Optionally generate line descriptions with AI
+
+## How The Application Works
+
+The app is server-rendered (Jinja templates) with a simple and practical data model:
+
+- Customers are stored once and reused across quotes
+- A quote has metadata (title, validity, notes, status)
+- Each quote has multiple line items (description, qty, unit, unit price)
+- Totals are calculated in the UI and preserved in the database
+- PDFs are generated from the quote record for consistent output
+
+Typical user flow:
+
+1. Create a customer.
+2. Create a quote for that customer.
+3. Add or generate line-item descriptions.
+4. Export/send PDF and track status.
+
+## What Is Good About It
+
+- Fast to adopt: no heavy setup required for demo use
+- Practical defaults: VAT and status flow are built in
+- Clear output: PDF is standardized and client-ready
+- Easy deployment: includes Render blueprint config
+- Expandable: supports PostgreSQL and optional AI/SMTP integrations
 
 ## Product Preview
 
@@ -33,8 +58,23 @@ This project gives you a focused workflow:
 
 ![PDF Placeholder](docs/images/screenshot-pdf.svg)
 
-Note:
-Replace these placeholder images with your real screenshots whenever you want. Keep the same filenames for zero README changes.
+## Image Slots (Ready For Your Real Screenshots)
+
+Current placeholders are already wired in README:
+
+- `docs/images/hero-overview.svg`
+- `docs/images/screenshot-dashboard.svg`
+- `docs/images/screenshot-quote-form.svg`
+- `docs/images/screenshot-pdf.svg`
+
+When you have real screenshots, replace these files with PNG/JPG/SVG and keep the same filenames to avoid README edits.
+
+Suggested future slots you can add later:
+
+- `docs/images/screenshot-customers-list.svg`
+- `docs/images/screenshot-customer-form.svg`
+- `docs/images/screenshot-quote-detail.svg`
+- `docs/images/screenshot-status-tracking.svg`
 
 ## Core Features
 
@@ -188,13 +228,25 @@ run.py
 - SMTP credentials (if email sending should be active)
 - OpenAI key (if AI text generation should be active)
 
-## Roadmap Ideas
+## Expansion Plan
 
-- Multi-user authentication
-- Tax rate configuration per market
-- Line-item templates
-- Branded themes per customer segment
-- Quote analytics and conversion metrics
+Near term:
+
+- Better form UX on mobile and tablet
+- Email flow improvements and clearer SMTP diagnostics
+- Reusable quote line-item templates
+
+Mid term:
+
+- User authentication and role-based access
+- Quote analytics (sent vs accepted conversion)
+- Multi-language quote output
+
+Long term:
+
+- Multi-tenant support for multiple companies
+- Branded client portal for quote acceptance
+- Integrations with accounting/CRM systems
 
 ## License
 

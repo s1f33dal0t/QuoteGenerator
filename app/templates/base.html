@@ -21,7 +21,7 @@
 <body class="bg-slate-50 min-h-screen flex flex-col text-slate-800">
   <nav class="bg-brand-900 text-white shadow-lg">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex items-center justify-between h-14">
+      <div class="flex flex-col items-start justify-between gap-2 py-3 sm:h-14 sm:flex-row sm:items-center sm:gap-0 sm:py-0">
         <a href="/" class="flex items-center gap-2 font-bold text-lg tracking-tight">
           <svg class="w-5 h-5 text-brand-100" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -29,7 +29,7 @@
           </svg>
           Quote Generator
         </a>
-        <div class="flex items-center gap-1">
+        <div class="flex w-full flex-wrap items-center gap-1 sm:w-auto sm:justify-end">
           <a href="/" class="nav-link {% if request.url.path == '/' %}nav-active{% endif %}">Dashboard</a>
           <a href="/customers" class="nav-link {% if '/customers' in request.url.path %}nav-active{% endif %}">Customers</a>
           <a href="/quotes" class="nav-link {% if '/quotes' in request.url.path %}nav-active{% endif %}">Quotes</a>

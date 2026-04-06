@@ -1,17 +1,24 @@
 """AI helper for generating quote text with OpenAI."""
+import os
 from app import config
 
 
+def _get_openai_api_key() -> str:
+    # Prefer runtime environment variable (Render dashboard), fall back to config.
+    return os.getenv("OPENAI_API_KEY", "").strip() or (config.OPENAI_API_KEY or "").strip()
+
+
 def generate_service_description(service_name: str, keywords: str = "") -> str:
-    if not config.OPENAI_API_KEY:
-        raise ValueError("OPENAI_API_KEY is not configured in the .env file.")
+    api_key = _get_openai_api_key()
+    if not api_key:
+        raise ValueError("OPENAI_API_KEY is not set in environment variables.")
 
     try:
         from openai import OpenAI
     except ImportError:
         raise ValueError("The openai package is not installed. Run: pip install openai")
 
-    client = OpenAI(api_key=config.OPENAI_API_KEY)
+    client = OpenAI(api_key=api_key)
 
     prompt_parts = [f"Service: {service_name}"]
     if keywords.strip():
