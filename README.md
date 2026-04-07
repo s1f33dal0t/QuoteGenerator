@@ -52,7 +52,7 @@ Typical user flow:
 
 ### Create Quote Form
 
-![Quote Form Placeholder](docs/images/screenshot-quote-form.svg)
+![Quote Form Placeholder](docs/images/screenshot-quote-form.png)
 
 ### PDF Output
 
