@@ -2,7 +2,7 @@
 
 Create professional quotes in minutes, not hours.
 
-![Quote Generator Hero](docs/images/hero-overview.svg)
+## ![Quote Generator Hero](docs/images/hero-overview.svg)
 
 Quote Generator is a focused FastAPI web app for freelancers and small teams. It helps you move from customer details to a finished quote PDF with less admin work, fewer mistakes, and a cleaner process.
 
@@ -48,33 +48,33 @@ Typical user flow:
 
 ### Dashboard
 
-![Dashboard Placeholder](docs/images/screenshot-dashboard.svg)
+### ![Dashboard Placeholder](docs/images/screenshot-dashboard.svg)
 
 ### Create Quote Form
 
-![Quote Form Placeholder](docs/images/screenshot-quote-form.png)
+### ![Quote Form Placeholder](docs/images/screenshot-quote-form.png)
 
 ### PDF Output
 
-![PDF Placeholder](docs/images/screenshot-pdf.svg)
+### ![PDF Placeholder](docs/images/screenshot-pdf.svg)
 
 ## Image Slots (Ready For Your Real Screenshots)
 
-Current placeholders are already wired in README:
+### Current placeholders are already wired in README:
 
-- `docs/images/hero-overview.svg`
-- `docs/images/screenshot-dashboard.svg`
-- `docs/images/screenshot-quote-form.svg`
-- `docs/images/screenshot-pdf.svg`
+### - `docs/images/hero-overview.svg`
+### - `docs/images/screenshot-dashboard.svg`
+### - `docs/images/screenshot-quote-form.svg`
+### - `docs/images/screenshot-pdf.svg`
 
-When you have real screenshots, replace these files with PNG/JPG/SVG and keep the same filenames to avoid README edits.
+### When you have real screenshots, replace these files with PNG/JPG/SVG and keep the same filenames to avoid README edits.
 
-Suggested future slots you can add later:
+### Suggested future slots you can add later:
 
-- `docs/images/screenshot-customers-list.svg`
-- `docs/images/screenshot-customer-form.svg`
-- `docs/images/screenshot-quote-detail.svg`
-- `docs/images/screenshot-status-tracking.svg`
+### - `docs/images/screenshot-customers-list.svg`
+### - `docs/images/screenshot-customer-form.svg`
+### - `docs/images/screenshot-quote-detail.svg`
+### - `docs/images/screenshot-status-tracking.svg`
 
 ## Core Features
 
@@ -221,10 +221,9 @@ render.yaml
 run.py
 ```
 
-## What To Replace Before Public Demo
+5### What To Replace Before Public Demo
 
 - Company identity values in Render env vars
-- Placeholder images in `docs/images/`
 - SMTP credentials (if email sending should be active)
 - OpenAI key (if AI text generation should be active)
 
