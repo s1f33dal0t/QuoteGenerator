@@ -48,19 +48,19 @@ Typical user flow:
 
 ### Dashboard
 
-<!-- ### ![Dashboard Placeholder](docs/images/screenshot-dashboard.svg)
+<!-- ### ![Dashboard Placeholder](docs/images/screenshot-dashboard.svg) -->
 
 ### Create Quote Form
 
-### ![Quote Form Placeholder](docs/images/screenshot-quote-form.png)
+<!-- ### ![Quote Form Placeholder](docs/images/screenshot-quote-form.png) -->
 
 ### PDF Output
 
-### ![PDF Placeholder](docs/images/screenshot-pdf.svg)
+<!-- ### ![PDF Placeholder](docs/images/screenshot-pdf.svg) -->
 
-## Image Slots (Ready For Your Real Screenshots)
+<!-- ## Image Slots (Ready For Your Real Screenshots) -->
 
-### Current placeholders are already wired in README:
+<!-- ### Current placeholders are already wired in README:
 
 ### - `docs/images/hero-overview.svg`
 ### - `docs/images/screenshot-dashboard.svg`
@@ -75,7 +75,7 @@ Typical user flow:
 ### - `docs/images/screenshot-customer-form.svg`
 ### - `docs/images/screenshot-quote-detail.svg`
 ### - `docs/images/screenshot-status-tracking.svg`
-
+-->
 ## Core Features
 
 - Customer management (create, edit, delete)
