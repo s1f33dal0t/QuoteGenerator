@@ -2,7 +2,7 @@
 
 Create professional quotes in minutes, not hours.
 
-## ![Quote Generator Hero](docs/images/hero-overview.svg)
+<!-- ## ![Quote Generator Hero](docs/images/hero-overview.svg) -->
 
 Quote Generator is a focused FastAPI web app for freelancers and small teams. It helps you move from customer details to a finished quote PDF with less admin work, fewer mistakes, and a cleaner process.
 
@@ -48,7 +48,7 @@ Typical user flow:
 
 ### Dashboard
 
-### ![Dashboard Placeholder](docs/images/screenshot-dashboard.svg)
+<!-- ### ![Dashboard Placeholder](docs/images/screenshot-dashboard.svg)
 
 ### Create Quote Form
 
