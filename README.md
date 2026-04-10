@@ -46,15 +46,15 @@ Typical user flow:
 
 ## Product Preview
 
-## Dashboard
+<!-- ## Dashboard
 
 <!-- ### ![Dashboard Placeholder](docs/images/screenshot-dashboard.svg) -->
 
-## Create Quote Form
+<!-- ## Create Quote Form
 
 <!-- ### ![Quote Form Placeholder](docs/images/screenshot-quote-form.png) -->
 
-## PDF Output
+<!-- ## PDF Output -->
 
 <!-- ### ![PDF Placeholder](docs/images/screenshot-pdf.svg) -->
 
