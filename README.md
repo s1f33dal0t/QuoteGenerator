@@ -44,7 +44,7 @@ Typical user flow:
 - Easy deployment: includes Render blueprint config
 - Expandable: supports PostgreSQL and optional AI/SMTP integrations
 
-## Product Preview
+<!-- ## Product Preview -->
 
 <!-- ## Dashboard
 
